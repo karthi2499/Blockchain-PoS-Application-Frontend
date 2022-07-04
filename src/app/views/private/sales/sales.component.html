@@ -1,0 +1,82 @@
+<div class="col-md-12">
+  <p-table
+    dataKey="id"
+    stateKey="sales"
+    [value]="sales"
+    styleClass="p-datatable-striped"
+    [rows]="10"
+    [paginator]="true"
+    #yp1
+    lang="fr"
+  >
+    <ng-template pTemplate="caption">
+      <div class="row">
+        <div class="col-md-6 text-start">
+          <h5 class="mt-2">Sales</h5>
+        </div>
+        <div class="col-md-6 text-right">
+          <button
+            (click)="refresh()"
+            pButton
+            type="button"
+            icon="pi pi-refresh"
+            class="p-button-sm p-button-link"
+          ></button>
+        </div>
+      </div>
+    </ng-template>
+    <ng-template pTemplate="header">
+      <tr>
+        <th pSortableColumn="orderId">Order</th>
+        <th class="text-right" pSortableColumn="amount">
+          Amount <p-sortIcon field="amount"></p-sortIcon>
+        </th>
+        <th pSortableColumn="carts">
+          Cart
+          <p-columnFilter
+            type="text"
+            field="carts"
+            display="menu"
+          ></p-columnFilter>
+        </th>
+        <th></th>
+        <th pSortableColumn="status">
+          status <p-sortIcon field="status"></p-sortIcon>
+        </th>
+        <th class="text-right" pSortableColumn="created_at">
+          Pay at <p-sortIcon field="created_at"></p-sortIcon>
+        </th>
+        <th>Phone Number</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-sale>
+      <tr>
+        <td>{{ sale.orderId }}</td>
+        <td class="text-right">{{ sale.amount | currency }}</td>
+        <td>
+          <span
+            *ngFor="let item of carts(sale.carts)"
+            class="badge badge-light mr-1 font-weight-normal"
+            >{{ item.quantity }} x {{ item.name }}</span
+          >
+        </td>
+        <td></td>
+        <td>
+          <span class="badge bg-primary text-white" *ngIf="sale.status"
+            >Paid</span
+          >
+          <span class="badge bg-danger text-white" *ngIf="!sale.status"
+            >Not pay</span
+          >
+        </td>
+        <td class="text-right">{{ sale.created_at | date: "dd/MM/yyyy" }}</td>
+        <td>{{ sale.phoneNumber }}</td>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="emptymessage" class="d-none">
+      <tr>
+        <td colspan="7">No sales found.</td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>

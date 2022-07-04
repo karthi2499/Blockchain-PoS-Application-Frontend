@@ -1,0 +1,159 @@
+<div class="container-fluid padding">
+  <div class="row">
+    <div class="col-md-8">
+      <div class="card">
+        <p-tabView>
+          <p-tabPanel
+            [header]="category.name"
+            *ngFor="let category of categories"
+          >
+            <p-dataView
+              [value]="category.products"
+              [paginator]="category?.products?.length > 10 ? true : false"
+              [rows]="10"
+              layout="grid"
+            >
+              <ng-template
+                let-product
+                pTemplate="gridItem"
+                class="bg-transparent row"
+              >
+                <div class="p-col-12 pl-0 cp" (click)="panier(product)">
+                  <div class="media bg-blur rounded m-1">
+                    <img
+                      class="mr-3"
+                      src="https://decizia.com/blog/wp-content/uploads/2017/06/default-placeholder.png"
+                      width="50"
+                      alt="Generic placeholder image"
+                    />
+                    <div class="media-body">
+                      <h5 class="mt-0">{{ product.name }}</h5>
+                      {{ product.price | currency }}
+                    </div>
+                  </div>
+                </div>
+              </ng-template>
+            </p-dataView>
+          </p-tabPanel>
+        </p-tabView>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card">
+        <div>
+          <div style="min-height: 520px !important">
+            <table class="table text-dark">
+              <thead>
+                <tr>
+                  <th class="text-capitalize">Q</th>
+                  <th class="text-capitalize">Product</th>
+                  <th class="text-capitalize">Price</th>
+                  <th class="text-capitalize text-center">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let x of basket">
+                  <td>{{ x.quantity }}</td>
+                  <td>{{ x.name }}</td>
+                  <td>{{ x.price | currency }}</td>
+                  <td class="text-right">
+                    <button
+                      class="btn btn-primary btn-sm px-2 py-1 mr-1"
+                      (click)="add(x)"
+                    >
+                      +
+                    </button>
+                    <button
+                      class="btn btn-warning btn-sm px-2 py-1 mr-1"
+                      (click)="reduce(x)"
+                    >
+                      -
+                    </button>
+                    <button
+                      class="btn btn-danger btn-sm px-2 py-1"
+                      (click)="remove(x)"
+                    >
+                      x
+                    </button>
+                  </td>
+                </tr>
+                <tr *ngIf="!basket">
+                  <td colspan="7">No products found.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="container m-2">
+            <div class="row align-content-center">
+              <div class="col-md-6">
+                <p class="mt-2 text-dark">
+                  <span class="mr-3">Total:</span>
+                  <strong>{{ cartTotal | currency }}</strong>
+                </p>
+              </div>
+              <div class="col-md-6 text-right">
+                <!-- <button
+                  class="btn btn-primary btn-block"
+                  (click)="chekout()"
+                >
+                  Buy
+                </button> -->
+                <button
+                  class="btn btn-primary btn-block"
+                  data-toggle="modal"
+                  data-target="#myModal"
+                >
+                  Buy
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="myModal" role="dialog">
+  <div class="modal-dialog">
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" #closebutton class="close" data-dismiss="modal">
+          &times;
+        </button>
+        <h3>Enter Mobile Number</h3>
+        <br />
+      </div>
+      <br />
+      <div ng-controller="myCtrl">
+        <form class="d-flex justify-content-center">
+          <input
+            type="tel"
+            ng-model="mobileNumber"
+            (keyup)="onNameKeyUp($event)"
+            id="mobile"
+            name="mobile"
+            placeholder="( +91 ) 9876 543 210"
+            pattern="[0-9]{3}-[0-9]{2}-[0-9]{3}"
+            required
+          />
+        </form>
+      </div>
+      <!-- <button class="btn btn-primary" (click)="makePayment(cartTotal)">
+        Pay With Stripe
+      </button> -->
+      <br />
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-primary"
+          id="closeModal"
+          (click)="postMobileNumber()"
+        >
+          Next
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
